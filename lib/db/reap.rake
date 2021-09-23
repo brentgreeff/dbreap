@@ -34,7 +34,7 @@ end
 
 def build_yml(table_name)
   i = "000"
-  select_all = ActiveRecord::Base.connection.select_all("SELECT * FROM %s" % table_name)
+  select_all = ActiveRecord::Base.connection.select_all("SELECT * FROM %s ORDER BY id" % table_name)
 
   yml = select_all.inject({}) do |accum, hash_of_obj|
 
