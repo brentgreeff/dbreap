@@ -48,7 +48,7 @@ def build_yml(table_name)
 end
 
 def build_value(value)
-  return JSON.parse(value)
+  JSON.parse(value)
 rescue JSON::ParserError, TypeError
-  return value
+  value
 end
