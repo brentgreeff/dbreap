@@ -25,7 +25,8 @@ namespace :db do
       path = "#{Rails.root}/db/fixtures/#{Rails.env}/#{table_name}.yml"
 
       File.open(path, 'w') do |file|
-        file.write build_yml(table_name)
+        yaml = build_yml(table_name)
+        file.write (yaml.gsub %r{\s+$}, '') + "\n"
       end
       puts "Completed extract for #{table_name}"
     end
@@ -34,9 +35,14 @@ end
 
 def build_yml(table_name)
   i = "000"
-  select_all = ActiveRecord::Base.connection.select_all("SELECT * FROM %s ORDER BY id" % table_name)
+  begin
+    select_all = select_all("SELECT * FROM %s ORDER BY id" % table_name)
+  rescue ActiveRecord::StatementInvalid => e
+    # some models have no ID
+    select_all = select_all("SELECT * FROM %s ORDER BY 1" % table_name)
+  end
 
-  yml = select_all.inject({}) do |accum, hash_of_obj|
+  select_all.inject({}) do |accum, hash_of_obj|
 
     hash_of_obj = hash_of_obj.reduce({}) do |new_obj, (column, value)|
       new_obj[column] = build_value(value)
@@ -47,8 +53,14 @@ def build_yml(table_name)
   end.to_yaml
 end
 
+def select_all(...)
+  ActiveRecord::Base.connection.select_all(...)
+end
+
 def build_value(value)
-  JSON.parse(value)
+  its_json = JSON.parse(value)
+  return [] if its_json.empty?
+  its_json
 rescue JSON::ParserError, TypeError
   value
 end
