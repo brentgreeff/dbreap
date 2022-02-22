@@ -35,14 +35,7 @@ end
 
 def build_yml(table_name)
   i = "000"
-  begin
-    select_all = select_all("SELECT * FROM %s ORDER BY id" % table_name)
-  rescue ActiveRecord::StatementInvalid => e
-    # some models have no ID
-    select_all = select_all("SELECT * FROM %s ORDER BY 1" % table_name)
-  end
-
-  select_all.inject({}) do |accum, hash_of_obj|
+  select_all(table_name).inject({}) do |accum, hash_of_obj|
 
     hash_of_obj = hash_of_obj.reduce({}) do |new_obj, (column, value)|
       new_obj[column] = build_value(value)
@@ -53,14 +46,23 @@ def build_yml(table_name)
   end.to_yaml
 end
 
-def select_all(...)
+def select_all(table_name)
+  begin
+    select_exec("SELECT * FROM %s ORDER BY id" % table_name)
+  rescue ActiveRecord::StatementInvalid => e
+    # some models have no ID
+    select_exec("SELECT * FROM %s ORDER BY 1" % table_name)
+  end
+end
+
+def select_exec(...)
   ActiveRecord::Base.connection.select_all(...)
 end
 
 def build_value(value)
-  its_json = JSON.parse(value)
-  return [] if its_json.empty?
-  its_json
-rescue JSON::ParserError, TypeError
+  its_probably_json = JSON.parse(value)
+  return [] if its_probably_json.empty?
+  its_probably_json
+rescue JSON::ParserError, TypeError, NoMethodError
   value
 end
