@@ -3,8 +3,11 @@
 module Dbreap
   module Reap
     def self.build_yml(table_name, connection: ActiveRecord::Base.connection)
-      rows = fetch_rows(table_name, connection:).each_with_index.with_object({}) do |(row, i), accum|
-        accum["#{table_name}_#{format('%03d', i + 1)}"] = row.transform_values { |v| cast_value(v) }
+      raw = fetch_rows(table_name, connection:)
+
+      rows = raw.each_with_index.with_object({}) do |(row, i), accum|
+        key = "#{table_name}_#{format('%03d', i + 1)}"
+        accum[key] = row.transform_values { |v| cast_value(v) }
       end
       Psych.dump(rows, line_width: -1)
     end
