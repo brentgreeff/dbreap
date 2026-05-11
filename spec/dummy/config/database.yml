@@ -1,0 +1,7 @@
+default: &default
+  adapter: sqlite3
+  timeout: 5000
+
+test:
+  <<: *default
+  database: storage/test.sqlite3

@@ -1,0 +1,14 @@
+Gemfile.lock
+tmp/
+spec/dummy/config/master.key
+spec/dummy/config/credentials.yml.enc
+spec/dummy/config/ci.rb
+spec/dummy/config/puma.rb
+spec/dummy/config/environments/development.rb
+spec/dummy/config/environments/production.rb
+spec/dummy/config.ru
+spec/dummy/Rakefile
+spec/dummy/db/seeds.rb
+spec/dummy/log/
+spec/dummy/tmp/
+spec/dummy/storage/
