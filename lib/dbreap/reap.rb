@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 module Dbreap
   module Reap
     def self.build_yml(table_name, connection: ActiveRecord::Base.connection)
-      fetch_rows(table_name, connection:).each_with_index.with_object({}) do |(row, i), accum|
+      rows = fetch_rows(table_name, connection:).each_with_index.with_object({}) do |(row, i), accum|
         accum["#{table_name}_#{format('%03d', i + 1)}"] = row.transform_values { |v| cast_value(v) }
-      end.then { |h| Psych.dump(h, line_width: -1) }
+      end
+      Psych.dump(rows, line_width: -1)
     end
 
     def self.fetch_rows(table_name, connection: ActiveRecord::Base.connection)
@@ -15,6 +18,7 @@ module Dbreap
 
     def self.cast_value(value)
       return value unless value.is_a?(String) && value.match?(/\A[\[{]/)
+
       JSON.parse(value)
     rescue JSON::ParserError
       value

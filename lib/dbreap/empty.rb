@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Dbreap
   module Empty
     def self.call(connection = ActiveRecord::Base.connection)

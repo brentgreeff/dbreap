@@ -1,9 +1,11 @@
-require "active_record/fixtures"
+# frozen_string_literal: true
 
-FIXTURES_PATHS = ["db/fixtures", "db/fixtures/#{Rails.env}"]
+require 'active_record/fixtures'
+
+FIXTURES_PATHS = ['db/fixtures', "db/fixtures/#{Rails.env}"].freeze
 
 FIXTURES_PATHS.each do |path|
   Dir.glob("#{Rails.root}/#{path}/*.yml").each do |file|
-    ActiveRecord::FixtureSet.create_fixtures(path, File.basename(file, ".*"))
+    ActiveRecord::FixtureSet.create_fixtures(path, File.basename(file, '.*'))
   end
 end

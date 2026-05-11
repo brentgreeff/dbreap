@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 namespace :db do
-  desc "Deletes everything in the database."
+  desc 'Deletes everything in the database.'
   task empty: :environment do
     Dbreap::Empty.call
   end

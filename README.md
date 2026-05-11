@@ -1,5 +1,7 @@
 # dbreap
 
+[![CI](https://github.com/brentgreeff/dbreap/actions/workflows/ci.yml/badge.svg)](https://github.com/brentgreeff/dbreap/actions/workflows/ci.yml)
+
 Share essential database records between developers, staging, and demo environments.
 
 The idea: curate data in your database the way you normally would — through the UI or console — then reap it to YAML fixtures and commit those files. Teammates, staging, and demo servers can seed from them with a single command.
@@ -52,6 +54,14 @@ This creates `db/fixtures/` and installs the seed loader into `db/seeds.rb` (app
 | `rake db:reap FIXTURES=ALL` | Reap all tables to YAML |
 | `rake db:reap FIXTURES=t1,t2` | Reap specific tables |
 | `rake db:empty` | Delete all rows from all tables (preserves schema) |
+
+## Development
+
+```bash
+bundle install
+bundle exec lefthook install  # installs pre-commit hooks
+bundle exec rspec
+```
 
 ## Notes
 
