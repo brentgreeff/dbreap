@@ -2,9 +2,9 @@
 
 [![CI](https://github.com/brentgreeff/dbreap/actions/workflows/ci.yml/badge.svg)](https://github.com/brentgreeff/dbreap/actions/workflows/ci.yml)
 
-Share essential database records between developers, staging, and demo environments.
+Namespaced seed data - saved in YML. Much easier to see what's going on with your seed data than a bunch of ruby code that no-one maintains.
 
-The idea: curate data in your database the way you normally would — through the UI or console — then reap it to YAML fixtures and commit those files. Teammates, staging, and demo servers can seed from them with a single command.
+Share essential database records between developers, staging, and demo environments.
 
 ## Installation
 
@@ -17,7 +17,9 @@ gem "dbreap"
 
 ### 1. Create your data
 
-Set up the records you want to share however you like — through the Rails console, the app UI, or seeds. Get it looking exactly right.
+Working on a new feature - Does having some example data help other developers on dev work with and test your new code in the UI?
+
+Create your data in the UI or console - and commit the seed YML alongside the feature code.
 
 ### 2. Reap to YAML
 
