@@ -13,6 +13,13 @@ Share essential database records between developers, staging, and demo environme
 gem "dbreap"
 ```
 
+```bash
+bundle install
+rails generate dbreap:install
+```
+
+This creates `db/fixtures/` and installs the seed loader into `db/seeds.rb` (appends if the file already exists).
+
 ## Workflow
 
 ### 1. Create your data
@@ -41,13 +48,7 @@ rake db:empty
 rake db:seed
 ```
 
-`db:seed` uses Rails' standard `db/seeds.rb`. Run the install generator to set it up:
-
-```bash
-rails generate dbreap:install
-```
-
-This creates `db/fixtures/` and installs the seed loader into `db/seeds.rb` (appends if the file already exists).
+`db:seed` uses Rails' standard `db/seeds.rb`, configured by the install generator.
 
 ## Rake tasks
 
@@ -71,3 +72,6 @@ bundle exec rspec
 - JSON columns are preserved as structured data
 - String columns containing numeric values (e.g. `"123"`) are not cast to integers
 - `schema_migrations` and `ar_internal_metadata` are always skipped
+- `db:empty` uses `DELETE` (not `TRUNCATE`) — schema and sequences are preserved, no DDL lock
+- Run `db:empty` before `db:seed` to avoid duplicate records on repeated seeds
+- Fixture files are namespaced by environment (`db/fixtures/<env>/`) — development, staging, and demo data can coexist
